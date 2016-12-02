@@ -1,0 +1,63 @@
+﻿jQuery(document).ready(function($){
+	$("article h2, article h3, article h4, article h5, article h6").each(function(i,el) {
+	//$('article h2').each(function(i,el){
+				    el.id = 'anchor' + (i+1)
+				      //  el.id = 'anchor' + (i+1)
+				});
+
+
+		var ToC =
+		  "<div itemscope itemtype='http://schema.org/Table'><meta itemprop='mainContentOfPage' content='true'/><div itemscope itemtype='http://schema.org/ItemList'> <nav role='navigation' class='table-of-contents' itemscope itemtype='http://schema.org/SiteNavigationElement' >" +
+		    "<h2 itemprop='about name'>On this page:</h2>" +
+		    " <meta itemprop='itemListOrder' content='Descending' /><ul>";
+
+		// var newLine, el, title, link;
+		 var newLine, el, title, link, level, baseLevel;
+
+		$("article h2, article h3, article h4, article h5, article h6").each(function() {
+
+  	              el = $(this)
+
+		  title = el.text();
+		  link = "#" + el.attr("id");
+
+var prevLevel = level || 0;
+	level = this.nodeName.substr(1);
+	if(!baseLevel) { // make sure you start with highest level of heading or it won't work
+		baseLevel = level;
+	}
+
+	if(prevLevel == 0) {
+		newLine = '<li itemprop=\"articleSection itemListElement\">';
+	} else if(level == prevLevel) {
+		newLine = '</li><li itemprop=\"articleSection itemListElement\">';
+	} else if(level > prevLevel) {
+		newLine = '<ul><li itemprop=\"articleSection itemListElement\">'.repeat(level - prevLevel);
+	} else if(level < prevLevel) {
+		newLine = '</li></ul>'.repeat(prevLevel - level) +
+		'</li><li itemprop=\"articleSection itemListElement\">';
+	}
+	newLine += "<a href='" + link + "'><span  itemprop=\"name\">" + title + "</span></a>";
+
+
+		  // newLine =
+		  //   "<li itemprop=\"itemListElement\">" +
+		  //     "<a href='" + link + "'><span  itemprop=\"name\">" +
+		  //       title +
+		  //     "</span></a>" +
+		  //   "</li>";
+
+		  ToC += newLine;
+
+		});
+
+		ToC +=
+		   "</ul>" +
+		  "</nav> </div>   </div>  <br style=\"clear:both\" />";
+
+		//$(".tablecontents").prepend(ToC);
+		$(".linklist").prepend(ToC);
+
+
+
+});

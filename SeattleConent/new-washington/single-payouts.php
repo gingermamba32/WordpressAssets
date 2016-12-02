@@ -1,0 +1,392 @@
+<?php
+
+get_header();
+
+$prefix = 'tk_';
+
+// Blog Page ID
+$tk_blog_id = get_option('id_blog_page');
+
+/* Blog Page title */
+$blog_headline = get_post_meta($tk_blog_id, $prefix . 'headline', true);
+
+/* Single Post featured image */
+$image = wp_get_attachment_image_src(get_post_thumbnail_id($post->ID), 'full');
+
+/* Single Post sidebar */
+$sidebar_postition = get_post_meta($post->ID, $prefix.'sidebar_position', true);
+if($sidebar_postition == ''){$sidebar_postition = get_post_meta($post->ID, $prefix.'sidebar_position', true);};
+
+
+/* Content padding */
+if ($sidebar_postition == 'right'){
+    $padding = 'style="padding-right:20px;"';
+}else if($sidebar_postition == 'left'){
+    $padding = 'style="padding-left:20px;"';
+}else{
+    $padding = '';
+}
+
+
+/* Selected sidebar */
+$sidebar_select = get_post_meta($post->ID, $prefix . 'sidebar', true);
+
+?>
+
+
+<!-- CONTENT STARTS -->
+<section>
+    <div class="container">
+
+        <!-- Page Title -->
+        <div class="row-fluid">
+            <div class="span12">
+                <h1 class="page_title"  itemprop="name headline"><?php the_title(); ?><?php //echo get_the_title($tk_blog_id)?></h1>
+                <?php if ($blog_headline !== "") { ?>
+                    <h2 class="page_description"><?php echo esc_html(get_post_meta($post->ID, 'settledby', true));?><?php //echo $blog_headline ?></h2>
+                <?php } ?>
+            </div>
+        </div>
+        <div class="row-fluid">
+            <div class="span12">
+                <img src="<?php echo get_template_directory_uri(); ?>/style/images/separator.png"  alt="separator"/>
+            </div>
+        </div>
+        <br>
+
+
+
+        <!-- Page Content -->
+          <main id="content" role="main">
+        <div class="row-fluid">
+
+
+<?php echo esc_html(get_post_meta($post->ID, 'wsm-author', true));?>
+<?php echo esc_html(get_post_meta($post->ID, 'wsm-book', true));?>
+<?php echo esc_html(get_post_meta($post->ID, 'wsm-business', true));?>
+<?php echo esc_html(get_post_meta($post->ID, 'wsm-events', true));?>
+<?php echo esc_html(get_post_meta($post->ID, 'wsm-job', true));?>
+<?php echo esc_html(get_post_meta($post->ID, 'wsm-movie', true));?>
+<?php echo esc_html(get_post_meta($post->ID, 'wsm-music', true));?>
+<?php echo esc_html(get_post_meta($post->ID, 'wsm-people', true));?>
+<?php echo esc_html(get_post_meta($post->ID, 'wsm-products', true));?>
+<?php echo esc_html(get_post_meta($post->ID, 'wsm-recipes', true));?>
+<?php echo esc_html(get_post_meta($post->ID, 'wsm-review', true));?>
+<?php echo esc_html(get_post_meta($post->ID, 'wsm-series', true));?>
+<?php echo esc_html(get_post_meta($post->ID, 'wsm-software', true));?>
+
+
+            <!-- Main Content -->
+            <div id="content" class="<?php if($sidebar_postition == 'right'){echo 'span8 pull-left';}elseif($sidebar_postition == 'left'){echo 'span8 pull-right';}elseif($sidebar_postition == 'fullwidth'){echo 'span12';}?>">
+
+
+
+
+
+                <?php
+                //The Loop
+                if (have_posts()) : while (have_posts()) : the_post();
+                    $categories = wp_get_post_categories($post -> ID);
+                    $count = count($categories);
+                    $i = 1;
+                    $format = get_post_format();
+                    $image = wp_get_attachment_image_src(get_post_thumbnail_id($post->ID), 'full');
+                    $video_link = get_post_meta($post->ID, $prefix.'video_link', true);
+                ?>
+
+
+                <!-- Post -->
+                <article class="settlement_post" <?php echo $padding; ?>>
+
+
+
+
+
+                    <!-- Post Meta -->
+                    <?php
+                        //Meta Date
+                        $post_day = get_the_date('d');
+                        $post_month = get_the_date('M');
+                        $post_year = get_the_date('Y');
+                    ?>
+
+                    <!-- Post Date -->
+                    <div class="post_date rounded pull-left">
+                        <div class="date pull-left"><span><?php echo $post_day; ?></span><?php echo $post_month; ?><br><?php echo $post_year; ?></div>
+                        <div class="format pull-left">
+                            <?php
+                                if ($format == 'standard') {
+                                    $post_format_img = 'standard';
+                                } elseif($format == 'audio'){
+                                    $post_format_img = 'audio';
+                                } elseif($format == 'gallery'){
+                                    $post_format_img = 'gallery';
+                                } elseif($format == 'link'){
+                                    $post_format_img = 'link';
+                                } elseif($format == 'quote'){
+                                    $post_format_img = 'quote';
+                                } else {
+                                    $post_format_img = 'standard';
+                                }
+                            ?>
+                            <img src="<?php echo get_template_directory_uri(); ?>/style/images/post-format-<?php echo $post_format_img; ?>.png" />
+                        </div>
+                        <div class="clear"></div>
+                    </div>
+
+<?php echo esc_html(get_post_meta($post->ID, 'datePublished', true));?>
+<?php echo esc_html(get_post_meta($post->ID, 'description', true));?>
+<?php echo esc_html(get_post_meta($post->ID, 'itemreviewed', true));?>
+<?php echo esc_html(get_post_meta($post->ID, 'payout', true));?>
+<?php echo esc_html(get_post_meta($post->ID, 'ratingValue', true));?>
+<?php echo esc_html(get_post_meta($post->ID, 'review', true));?>
+<?php echo esc_html(get_post_meta($post->ID, 'reviewCount', true));?>
+<?php echo esc_html(get_post_meta($post->ID, 'reviewer', true));?>
+<?php echo esc_html(get_post_meta($post->ID, 'review_count', true));?>
+<?php echo esc_html(get_post_meta($post->ID, 'settledby', true));?>
+<?php echo esc_html(get_post_meta($post->ID, 'settlement_loop', true));?>
+<?php echo esc_html(get_post_meta($post->ID, 'slide_template', true));?>
+<?php echo esc_html(get_post_meta($post->ID, 'test', true));?>
+
+
+                    <!-- Post title -->
+                    <h3 class="post_title red"  itemprop="name headline"><?php the_title(); ?></h3>
+
+
+                    <!-- By -->
+                    <span class="by"><?php if($format == 'audio') { if($audio_text != ''){ echo $audio_text.' / '; } } ?><?php the_author_posts_link(); ?> / <a href="<?php the_permalink(); ?>"><?php comments_number( '0', '1', '%' ); ?> <?php _e('Comments / ', tk_theme_name) ?></a></span>
+                    <span class="by">
+                        <ul>
+                            <li>
+                                <?php
+                                    foreach ($categories as $cat_id) {
+                                    $cat_name = get_cat_name($cat_id);
+                                    $cat_link = get_category_link($cat_id);
+
+                                    if ($count == $i) {
+                                        $comma = "";
+                                    } else {
+                                        $comma = ",";
+                                    }
+                                ?>
+                                <a href="<?php echo $cat_link;?>"><?php echo $cat_name.$comma;?></a>
+                                <?php $i++;} ?>
+                            </li>
+                        </ul>
+                    </span>
+                    <div class="clear"></div>
+
+   <!-- Post Content -->
+
+
+
+                    <br>
+<span  itemscope="itemscope" itemtype="http://schema.org/Person" class="arvo" style="font-weight: 500;color:#fff;background:#6d6a4c; font-size: 2em;line-height: 2em;padding:10px 40px;"><span itemprop="name">Salt Lake Attorney
+    <?php echo esc_html(get_post_meta($post->ID, 'settledby', true));?> </span></span><br />
+<span class="ptsans" style="color:#004865; font-size: 2em;line-height: 2em;">Has Successfully Closed Another Case For an Estimated Settlement of <?php echo esc_html(get_post_meta($post->ID, 'payout', true));?></span>
+<br /><br />
+
+
+             <div style="background:#fff; padding:50px;" itemprop="description articleBody">     <?php echo esc_html(get_post_meta($post->ID, 'description', true));?>  <?php // the_content(); ?></div>
+
+
+
+<div itemprop="review" itemscope="itemscope" itemtype="http://schema.org/attorney">
+    <meta itemprop="name" conent="<?php the_title(); ?>" />
+    <span itemprop="author" itemscope="itemscope" itemtype="http://schema.org/Person"><meta itemprop="name" content="<?php echo esc_html(get_post_meta($post->ID, 'reviewer', true));?>" />
+        <time itemprop="datePublished" datetime="<?php echo $post->post_date; ?>"></time>
+
+      <meta itemprop="affiliation" itemscope="itemscope" itemtype="http://schema.org/Organization" />
+        <meta itemprop="name" content="Driggs Bills & Day Law Firm"/>
+       <meta itemprop="description" content="<?php echo esc_html(get_post_meta($post->ID, 'description', true));?>" />
+
+    <div itemprop="aggregateRating" itemscope="itemscope" itemtype="http://schema.org/AggregateRating">
+        <span itemprop="ratingValue" content="<?php echo esc_html(get_post_meta($post->ID, 'ratingValue', true));?>" />
+        <meta itemprop="bestRating" content="5" />
+        <meta itemprop="worstRating" content="2.5" />
+        <meta itemprop="ratingCount" content="1" />
+         <meta itemprop="reviewCount" content="<?php echo esc_html(get_post_meta($post->ID, 'reviewCount', true));?>" />
+    </div>
+</div>
+
+
+<span itemprop="aggregateRating" itemscope itemtype="http://schema.org/AggregateRating">
+    <meta itemprop="ratingValue" content="<?php echo esc_html(get_post_meta($post->ID, 'ratingValue', true));?>" />
+    <meta itemprop="reviewCount" content="<?php echo esc_html(get_post_meta($post->ID, 'reviewCount', true));?>" />
+</span>
+<span itemscope itemtype="http://schema.org/Review">
+    <span itemprop="itemReviewed" itemscope itemtype="http://schema.org/Attorney">
+        <a itemprop="url" href="<?php the_permalink(); ?> " class="visually hidden"><span itemprop="name"><?php the_title(); ?></span></a>
+    </span>
+    <meta itemprop="author" content="<?php echo esc_html(get_post_meta($post->ID, 'reviewer', true));?>" />
+    <meta itemprop="datePublished" content="<?php echo $post->post_date; ?>" />
+    <meta itemprop="description" content="<?php echo esc_html(get_post_meta($post->ID, 'description', true));?>" />
+
+
+    <div itemscope itemtype="http://data-vocabulary.org/Review">
+        <meta itemprop="itemreviewed" content="<?php the_title(); ?> case settlement in salt lake" />
+         <meta itemprop="datePublished" content="<?php echo $post->post_date; ?>" />
+        <meta itemprop="reviewer" content="<?php echo esc_html(get_post_meta($post->ID, 'reviewer', true));?>" />
+        <meta itemprop="summary" content="Short Summary: <?php echo esc_html(get_post_meta($post->ID, 'description', true));?>" />
+        <meta itemprop="description" content="<?php echo esc_html(get_post_meta($post->ID, 'description', true));?>" />
+        <meta itemprop="rating" content="5" />
+    </div>
+
+                    <!-- Post Content -->
+                    <br>
+
+                    <!-- Tags -->
+                    <div class="tags_wrap">
+                        <?php the_tags('<span class="red pull-left">Tags: </span>', ', ', ' '); ?>
+                    </div><!--/blog-single-tag-->
+                    <div class="clear"></div>
+
+                    <div class="row-fluid">
+                        <div class="span12">
+                            <img src="<?php echo get_template_directory_uri(); ?>/style/images/sep.png" alt="separator"/>
+                            <div class="sep_border"></div>
+                        </div>
+                    </div>
+
+
+            <?php endwhile; endif; //loop end?>
+  </main><!-- #content -->
+
+                    <?php //Enable Social Share
+                        $social_share_blog = get_theme_option(tk_theme_name . '_social_social_share_blog');
+                        if ($social_share_blog != 'yes') {
+                    ?>
+
+                        <!-- Social Share Buttons -->
+                        <?php
+                            $facebook_share = get_theme_option(tk_theme_name . '_social_use_facebook');
+                            $twitter_share = get_theme_option(tk_theme_name . '_social_use_twitter');
+                            $google_share = get_theme_option(tk_theme_name . '_social_use_google');
+                            $linkedin_share = get_theme_option(tk_theme_name . '_social_use_linkedin');
+                            $pinterest_share = get_theme_option(tk_theme_name . '_social_use_pinterest');
+                            $stumbleupon_share = get_theme_option(tk_theme_name . '_social_use_stumbleupon');
+                            $thepermalink = get_permalink();
+
+                            if ($facebook_share != 'yes' || $twitter_share != 'yes' || $google_share != 'yes' || $linkedin_share != 'yes' || $pinterest_share != 'yes' || $stumbleupon_share != 'yes') {
+                        ?>
+                                <div class="social_sharing">
+
+                                    <?php if ($facebook_share != 'yes') { ?>
+                                        <div class="share">
+                                            <div class="share_counter rounded">
+                                                <?php echo get_likes($thepermalink); ?>
+                                            </div>
+                                            <div id="share_facebook" class="rounded">
+                                                <a target="_blank" href="http://www.facebook.com/sharer.php?u=<?php echo $thepermalink; ?>&t=<?php the_title(); ?>"><?php _e('Facebook', tk_theme_name) ?></a>
+                                            </div>
+                                        </div>
+                                    <?php } ?>
+
+                                    <?php if ($twitter_share != 'yes') { ?>
+                                        <div class="share">
+                                            <div class="share_counter rounded">
+                                                <?php echo get_tweets(get_permalink()); ?>
+                                            </div>
+                                            <div id="share_twitter" class="rounded">
+                                                <a target="_blank" href="https://twitter.com/share?url=<?php echo $thepermalink; ?>&text=<?php the_title(); ?>" class="twitter-share-button"><?php _e('Twitter', tk_theme_name) ?></a>
+                                            </div>
+                                        </div>
+                                    <?php } ?>
+
+                                    <?php if ($google_share != 'yes') { ?>
+                                        <div class="share">
+                                            <div class="share_counter rounded">
+                                                <?php echo get_plusones($thepermalink); ?>
+                                            </div>
+                                            <div id="share_google" class="rounded">
+                                                <a target="_blank" href="https://plus.google.com/share?url=<?php echo $thepermalink; ?>&t=<?php the_title(); ?>"><?php _e('Google+', tk_theme_name) ?></a>
+                                            </div>
+                                        </div>
+                                    <?php } ?>
+
+                                    <?php if ($linkedin_share != 'yes') { ?>
+                                        <div class="share">
+                                            <div class="share_counter rounded">
+                                                <?php echo get_linkedin($thepermalink); ?>
+                                            </div>
+                                            <div id="share_linkedin" class="rounded">
+                                                <a target="_blank" href="http://www.linkedin.com/shareArticle?url=<?php echo $thepermalink; ?>&title=<?php the_title(); ?>"><?php _e('LinkedIn', tk_theme_name) ?></a>
+                                            </div>
+                                        </div>
+                                    <?php } ?>
+
+                                    <?php if ($pinterest_share != 'yes') { ?>
+                                        <?php $pin_image = wp_get_attachment_image_src(get_post_thumbnail_id($post->ID), 'full'); ?>
+                                        <div class="share">
+                                            <div class="share_counter rounded">
+                                                <?php echo get_pinit($thepermalink); ?>
+                                            </div>
+                                            <div id="share_pinterest" class="rounded">
+                                                <a target="_blank" href="http://pinterest.com/pin/create/button/?url=<?php echo $thepermalink; ?>&media=<?php echo $pin_image[0]; ?>&description=<?php the_title(); ?>"><?php _e('Pinterest', tk_theme_name) ?></a>
+                                            </div>
+                                        </div>
+                                    <?php } ?>
+
+                                    <?php if ($stumbleupon_share != 'yes') { ?>
+                                        <div class="share">
+                                            <div class="share_counter rounded">
+                                                <?php echo get_stumbleupon($thepermalink); ?>
+                                            </div>
+                                            <div id="share_stumbleupon" class="rounded">
+                                                <a target="_blank" href="http://www.stumbleupon.com/submit?url=<?php echo $thepermalink; ?>&title=<?php the_title(); ?>"><?php _e('Stumbleupon', tk_theme_name) ?></a>
+                                            </div>
+                                        </div>
+                                    <?php } ?>
+
+                                    <div class="clear"></div>
+                                </div><!--/social_sharing -->
+                            <?php } ?>
+
+                    <?php } //Enable Social Share ?>
+
+
+                    <!--COMMENTS-->
+                    <div class="comment-start">
+                        <?php if (comments_open()) : ?>
+                            <?php comments_template(); // Get wp-comments.php template  ?>
+                        <?php endif; ?>
+                    </div><!--/comment-start-->
+
+               </article><!-- #post-<?php the_ID(); ?> -->
+
+            </div><!-- #content -->
+
+
+
+            <!-- Sidebar Left -->
+            <?php
+                if ($sidebar_postition == 'left'){
+                    echo '<div class="span4 pull-left" style="margin-left:0px;">';
+                        tk_get_sidebar('Left', $sidebar_select);
+                    echo '</div>';
+                }
+            ?>
+
+
+            <!-- Sidebar Right -->
+            <?php
+                if ($sidebar_postition == 'right'){
+                    echo '<div class="span4 pull-right">';
+                        tk_get_sidebar('Right', $sidebar_select);
+                    echo '</div>';
+                }
+            ?>
+
+
+        </div><!-- row-fluid -->
+<div class="breadcrumbs">
+    <?php
+    if(function_exists('bcn_display'))
+    {
+        bcn_display();
+    }
+    ?>
+</div>
+
+
+<?php get_footer(); ?>

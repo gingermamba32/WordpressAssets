@@ -1,0 +1,7 @@
+<!-- Used for install referrer tracking -->
+<service android:name="com.google.tagmanager.InstallReferrerService" />
+<receiver android:name="com.google.tagmanager.InstallReferrerReceiver" android:exported="true">
+  <intent-filter>
+    <action android:name="com.android.vending.INSTALL_REFERRER" />
+  </intent-filter>
+</receiver>
